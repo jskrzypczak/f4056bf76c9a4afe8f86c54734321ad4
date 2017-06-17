@@ -15,17 +15,17 @@ WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
 
 const int Mainrect_x = 200;
 const int Mainrect_y = 0;
-const int Mainrect_height = 698;
+const int Mainrect_height = 700;
 const int Mainrect_width = 700;
 
-const int Floor_height = 128;
+const int Floor_height = 130;
 const int Floor_width = 300;
 
-const int Elevator_height = Mainrect_height;
+const int Elevator_height = 665;
 const int Elevator_width = 200;
 
 const int Exit_height = Floor_height;
-const int Exit_width = 200;
+const int Exit_width = 170;
 
 RECT MAINRECT = { Mainrect_x, Mainrect_y, Mainrect_x + Mainrect_width, Mainrect_y + Mainrect_height };
 
@@ -162,7 +162,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    hInst = hInstance; // Store instance handle in our global variable
 
    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      0, 0, 900, 698, nullptr, nullptr, hInstance, nullptr);
+      0, 0, Mainrect_width + 200, Mainrect_height+30, nullptr, nullptr, hInstance, nullptr);
 
    if (!hWnd)
    {
@@ -210,6 +210,53 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
+
+#pragma region Frame 
+			Graphics graphics(hdc);
+			Pen Pen(Color(255, 0, 0, 0), 2);
+			graphics.DrawLine(	&Pen,
+								Mainrect_x + Floor_width, 
+								Mainrect_y + 6,
+								Mainrect_x + Floor_width,
+								Mainrect_y + Elevator_height);
+
+			graphics.DrawLine(	&Pen,
+								Mainrect_x + Floor_width + Elevator_width,
+								Mainrect_y + 6, 
+								Mainrect_x + Floor_width + Elevator_width, 
+								Mainrect_y + Elevator_height);
+
+			for (int i = 1; i <= 5; i++) 
+			{
+				graphics.DrawLine(	&Pen,
+									Mainrect_x,
+									Mainrect_y + Floor_height * i,
+									Mainrect_x + Floor_width,
+									Mainrect_y + Floor_height * i);
+			}
+
+			for (int i = 1; i <= 5; i++)
+			{
+				graphics.DrawLine(	&Pen,
+									Mainrect_x + Floor_width + Elevator_width,
+									Mainrect_y + Floor_height * i,
+									Mainrect_x + Floor_width + Elevator_width + Exit_width,
+									Mainrect_y + Floor_height * i);
+			}
+
+			graphics.DrawLine(	&Pen,
+								Mainrect_x + Floor_width,
+								Mainrect_y + 6,
+								Mainrect_x + Floor_width + Elevator_width,
+								Mainrect_y + 6);
+
+			graphics.DrawLine(	&Pen,
+								Mainrect_x + Floor_width,
+								Mainrect_y + Elevator_height,
+								Mainrect_x + Floor_width + Elevator_width,
+								Mainrect_y + Elevator_height);
+#pragma endregion
+
             // TODO: Add any drawing code that uses hdc here...
 			/*FillRect(hdc, &MAINRECT, (HBRUSH)(COLOR_WINDOW + 13));
 			FillRect(hdc, &FLOOR_4, (HBRUSH)(COLOR_WINDOW + 9));
@@ -217,16 +264,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			FillRect(hdc, &FLOOR_2, (HBRUSH)(COLOR_WINDOW + 7));
 			FillRect(hdc, &FLOOR_1, (HBRUSH)(COLOR_WINDOW + 6));
 			FillRect(hdc, &FLOOR_0, (HBRUSH)(COLOR_WINDOW + 5));
-
 			FillRect(hdc, &ELEVATOR, (HBRUSH)(COLOR_WINDOW + 14));
-
 			FillRect(hdc, &EXIT_4, (HBRUSH)(COLOR_WINDOW + 9));
 			FillRect(hdc, &EXIT_3, (HBRUSH)(COLOR_WINDOW + 8));
 			FillRect(hdc, &EXIT_2, (HBRUSH)(COLOR_WINDOW + 7));
 			FillRect(hdc, &EXIT_1, (HBRUSH)(COLOR_WINDOW + 6));
 			FillRect(hdc, &EXIT_0, (HBRUSH)(COLOR_WINDOW + 5));*/
-
-
+			/*MoveToEx(hdc, Mainrect_x + Floor_width, Mainrect_y, NULL);
+			LineTo(hdc, Mainrect_x + Floor_width, Mainrect_y + Elevator_height);
+			MoveToEx(hdc, Mainrect_x + Floor_width + Elevator_width, Mainrect_y, NULL);
+			LineTo(hdc, Mainrect_x + Floor_width + Elevator_width, Mainrect_y + Elevator_height);*/
             EndPaint(hWnd, &ps);
         }
         break;
