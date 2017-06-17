@@ -11,6 +11,62 @@ HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
 
+#pragma region MainWindowDivision
+
+const int Mainrect_x = 200;
+const int Mainrect_y = 0;
+const int Mainrect_height = 698;
+const int Mainrect_width = 700;
+
+const int Floor_height = 128;
+const int Floor_width = 300;
+
+const int Elevator_height = Mainrect_height;
+const int Elevator_width = 200;
+
+const int Exit_height = Floor_height;
+const int Exit_width = 200;
+
+RECT MAINRECT = { Mainrect_x, Mainrect_y, Mainrect_x + Mainrect_width, Mainrect_y + Mainrect_height };
+
+RECT FLOOR_4 = { Mainrect_x, Mainrect_y + Floor_height *0, Mainrect_x + Floor_width, Mainrect_y + Floor_height *1 };
+RECT FLOOR_3 = { Mainrect_x, Mainrect_y + Floor_height *1, Mainrect_x + Floor_width, Mainrect_y + Floor_height *2 };
+RECT FLOOR_2 = { Mainrect_x, Mainrect_y + Floor_height *2, Mainrect_x + Floor_width, Mainrect_y + Floor_height *3 };
+RECT FLOOR_1 = { Mainrect_x, Mainrect_y + Floor_height *3, Mainrect_x + Floor_width, Mainrect_y + Floor_height *4 };
+RECT FLOOR_0 = { Mainrect_x, Mainrect_y + Floor_height *4, Mainrect_x + Floor_width, Mainrect_y + Floor_height *5 };
+
+RECT ELEVATOR = {	Mainrect_x + Floor_width, 
+					Mainrect_y, 
+					Mainrect_x + Floor_width + Elevator_width,
+					Mainrect_y + Elevator_height };
+
+RECT EXIT_4 = {		Mainrect_x + Floor_width + Elevator_width,
+					Mainrect_y + Exit_height * 0,
+					Mainrect_x + Floor_width + Elevator_width + Exit_width,
+					Mainrect_y + Exit_height * 1 };
+
+RECT EXIT_3 = {		Mainrect_x + Floor_width + Elevator_width,
+					Mainrect_y + Exit_height * 1,
+					Mainrect_x + Floor_width + Elevator_width + Exit_width,
+					Mainrect_y + Exit_height * 2 };
+
+RECT EXIT_2 = {		Mainrect_x + Floor_width + Elevator_width,
+					Mainrect_y + Exit_height * 2,
+					Mainrect_x + Floor_width + Elevator_width + Exit_width,
+					Mainrect_y + Exit_height * 3 };
+
+RECT EXIT_1 = {		Mainrect_x + Floor_width + Elevator_width,
+					Mainrect_y + Exit_height * 3,
+					Mainrect_x + Floor_width + Elevator_width + Exit_width,
+					Mainrect_y + Exit_height * 4 };
+
+RECT EXIT_0 = {		Mainrect_x + Floor_width + Elevator_width,
+					Mainrect_y + Exit_height * 4,
+					Mainrect_x + Floor_width + Elevator_width + Exit_width,
+					Mainrect_y + Exit_height * 5 };
+
+#pragma endregion
+
 // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
@@ -26,6 +82,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(lpCmdLine);
 
     // TODO: Place code here.
+	
+
 
     // Initialize global strings
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
@@ -61,7 +119,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     return (int) msg.wParam;
 }
-
 
 
 //
@@ -105,7 +162,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    hInst = hInstance; // Store instance handle in our global variable
 
    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+      0, 0, 900, 698, nullptr, nullptr, hInstance, nullptr);
 
    if (!hWnd)
    {
@@ -154,6 +211,22 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
             // TODO: Add any drawing code that uses hdc here...
+			/*FillRect(hdc, &MAINRECT, (HBRUSH)(COLOR_WINDOW + 13));
+			FillRect(hdc, &FLOOR_4, (HBRUSH)(COLOR_WINDOW + 9));
+			FillRect(hdc, &FLOOR_3, (HBRUSH)(COLOR_WINDOW + 8));
+			FillRect(hdc, &FLOOR_2, (HBRUSH)(COLOR_WINDOW + 7));
+			FillRect(hdc, &FLOOR_1, (HBRUSH)(COLOR_WINDOW + 6));
+			FillRect(hdc, &FLOOR_0, (HBRUSH)(COLOR_WINDOW + 5));
+
+			FillRect(hdc, &ELEVATOR, (HBRUSH)(COLOR_WINDOW + 14));
+
+			FillRect(hdc, &EXIT_4, (HBRUSH)(COLOR_WINDOW + 9));
+			FillRect(hdc, &EXIT_3, (HBRUSH)(COLOR_WINDOW + 8));
+			FillRect(hdc, &EXIT_2, (HBRUSH)(COLOR_WINDOW + 7));
+			FillRect(hdc, &EXIT_1, (HBRUSH)(COLOR_WINDOW + 6));
+			FillRect(hdc, &EXIT_0, (HBRUSH)(COLOR_WINDOW + 5));*/
+
+
             EndPaint(hWnd, &ps);
         }
         break;
