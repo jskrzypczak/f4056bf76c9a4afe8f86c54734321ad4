@@ -6,10 +6,56 @@
 
 #define MAX_LOADSTRING 100
 
+#define ID_BUTTON_F4_0 0
+#define ID_BUTTON_F4_1 1
+#define ID_BUTTON_F4_2 2
+#define ID_BUTTON_F4_3 3
+#define ID_BUTTON_F4_4 4
+
+#define ID_BUTTON_F3_0 5
+#define ID_BUTTON_F3_1 6
+#define ID_BUTTON_F3_2 7
+#define ID_BUTTON_F3_3 8
+#define ID_BUTTON_F3_4 9
+
+#define ID_BUTTON_F2_0 10
+#define ID_BUTTON_F2_1 11
+#define ID_BUTTON_F2_2 12
+#define ID_BUTTON_F2_3 13
+#define ID_BUTTON_F2_4 14
+
+#define ID_BUTTON_F1_0 15
+#define ID_BUTTON_F1_1 16
+#define ID_BUTTON_F1_2 17
+#define ID_BUTTON_F1_3 18
+#define ID_BUTTON_F1_4 19
+
+#define ID_BUTTON_F0_0 20
+#define ID_BUTTON_F0_1 21
+#define ID_BUTTON_F0_2 22
+#define ID_BUTTON_F0_3 23
+#define ID_BUTTON_F0_4 24
+
+#define ID_EDIT_F4 25
+#define ID_EDIT_F3 26
+#define ID_EDIT_F2 27
+#define ID_EDIT_F1 28
+#define ID_EDIT_F0 29
+
+
 // Global Variables:
 HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
+HWND Floor_4_Passengrs;
+HWND Floor_3_Passengrs;
+HWND Floor_2_Passengrs;
+HWND Floor_1_Passengrs;
+HWND Floor_0_Passengrs;
+
+
+
+const int margin = 6;
 
 #pragma region MainWindowDivision
 
@@ -160,9 +206,108 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // Store instance handle in our global variable
+   int button_size = 30;
 
    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
       0, 0, Mainrect_width + 200, Mainrect_height+30, nullptr, nullptr, hInstance, nullptr);
+
+#pragma region Buttons
+
+   Floor_4_Passengrs = CreateWindowEx(WS_EX_CLIENTEDGE, L"EDIT", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER,
+	   40 + button_size * 1, 5 + margin + Floor_height * 0 + button_size * 2, button_size, button_size, hWnd, (HMENU)ID_EDIT_F4, hInstance, NULL);
+
+   HWND B_F4_0 = CreateWindowEx(WS_EX_CLIENTEDGE, L"BUTTON", L"0", WS_CHILD | WS_VISIBLE | WS_BORDER,
+	   40 + button_size * 0, 5 + margin + Floor_height * 0 + button_size * 2, button_size, button_size, hWnd, (HMENU)ID_BUTTON_F4_0, hInstance, NULL);
+
+   HWND B_F4_1 = CreateWindowEx(WS_EX_CLIENTEDGE, L"BUTTON", L"1", WS_CHILD | WS_VISIBLE | WS_BORDER,
+	   40 + button_size * 1, 5 + margin + Floor_height * 0 + button_size * 1, button_size, button_size, hWnd, (HMENU)ID_BUTTON_F4_1, hInstance, NULL);
+
+   HWND B_F4_2 = CreateWindowEx(WS_EX_CLIENTEDGE, L"BUTTON", L"2", WS_CHILD | WS_VISIBLE | WS_BORDER,
+	   40 + button_size * 0, 5 + margin + Floor_height * 0 + button_size * 1, button_size, button_size, hWnd, (HMENU)ID_BUTTON_F4_2, hInstance, NULL);
+
+   HWND B_F4_3 = CreateWindowEx(WS_EX_CLIENTEDGE, L"BUTTON", L"3", WS_CHILD | WS_VISIBLE | WS_BORDER,
+	   40 + button_size * 1, 5 + margin + Floor_height * 0 + button_size * 0, button_size, button_size, hWnd, (HMENU)ID_BUTTON_F4_3, hInstance, NULL);
+
+   HWND B_F4_4 = CreateWindowEx(WS_EX_CLIENTEDGE, L"BUTTON", L"-", WS_CHILD | WS_VISIBLE | WS_BORDER,
+	   40 + button_size * 0, 5 + margin + Floor_height * 0 + button_size * 0, button_size, button_size, hWnd, (HMENU)ID_BUTTON_F4_4, hInstance, NULL);
+
+
+   Floor_3_Passengrs = CreateWindowEx(WS_EX_CLIENTEDGE, L"EDIT", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER,
+	   40 + button_size * 1, 5 + margin + Floor_height * 1 + button_size * 2, button_size, button_size, hWnd, (HMENU)ID_EDIT_F3, hInstance, NULL);
+
+   HWND B_F3_0 = CreateWindowEx(WS_EX_CLIENTEDGE, L"BUTTON", L"0", WS_CHILD | WS_VISIBLE | WS_BORDER,
+	   40 + button_size * 0, 5 + margin + Floor_height * 1 + button_size * 2, button_size, button_size, hWnd, (HMENU)ID_BUTTON_F3_0, hInstance, NULL);
+
+   HWND B_F3_1 = CreateWindowEx(WS_EX_CLIENTEDGE, L"BUTTON", L"1", WS_CHILD | WS_VISIBLE | WS_BORDER,
+	   40 + button_size * 1, 5 + margin + Floor_height * 1 + button_size * 1, button_size, button_size, hWnd, (HMENU)ID_BUTTON_F3_1, hInstance, NULL);
+
+   HWND B_F3_2 = CreateWindowEx(WS_EX_CLIENTEDGE, L"BUTTON", L"2", WS_CHILD | WS_VISIBLE | WS_BORDER,
+	   40 + button_size * 0, 5 + margin + Floor_height * 1 + button_size * 1, button_size, button_size, hWnd, (HMENU)ID_BUTTON_F3_2, hInstance, NULL);
+
+   HWND B_F3_3 = CreateWindowEx(WS_EX_CLIENTEDGE, L"BUTTON", L"-", WS_CHILD | WS_VISIBLE | WS_BORDER,
+	   40 + button_size * 1, 5 + margin + Floor_height * 1 + button_size * 0, button_size, button_size, hWnd, (HMENU)ID_BUTTON_F3_3, hInstance, NULL);
+																											  
+   HWND B_F3_4 = CreateWindowEx(WS_EX_CLIENTEDGE, L"BUTTON", L"4", WS_CHILD | WS_VISIBLE | WS_BORDER,		  
+	   40 + button_size * 0, 5 + margin + Floor_height * 1 + button_size * 0, button_size, button_size, hWnd, (HMENU)ID_BUTTON_F3_4, hInstance, NULL);
+
+
+   Floor_2_Passengrs = CreateWindowEx(WS_EX_CLIENTEDGE, L"EDIT", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER,
+	   40 + button_size * 1, 5 + margin + Floor_height * 2 + button_size * 2, button_size, button_size, hWnd, (HMENU)ID_EDIT_F2, hInstance, NULL);
+
+   HWND B_F2_0 = CreateWindowEx(WS_EX_CLIENTEDGE, L"BUTTON", L"0", WS_CHILD | WS_VISIBLE | WS_BORDER,
+	   40 + button_size * 0, 5 + margin + Floor_height * 2 + button_size * 2, button_size, button_size, hWnd, (HMENU)ID_BUTTON_F2_0, hInstance, NULL);
+
+   HWND B_F2_1 = CreateWindowEx(WS_EX_CLIENTEDGE, L"BUTTON", L"1", WS_CHILD | WS_VISIBLE | WS_BORDER,
+	   40 + button_size * 1, 5 + margin + Floor_height * 2 + button_size * 1, button_size, button_size, hWnd, (HMENU)ID_BUTTON_F2_1, hInstance, NULL);
+
+   HWND B_F2_2 = CreateWindowEx(WS_EX_CLIENTEDGE, L"BUTTON", L"-", WS_CHILD | WS_VISIBLE | WS_BORDER,
+	   40 + button_size * 0, 5 + margin + Floor_height * 2 + button_size * 1, button_size, button_size, hWnd, (HMENU)ID_BUTTON_F2_2, hInstance, NULL);
+
+   HWND B_F2_3 = CreateWindowEx(WS_EX_CLIENTEDGE, L"BUTTON", L"3", WS_CHILD | WS_VISIBLE | WS_BORDER,
+	   40 + button_size * 1, 5 + margin + Floor_height * 2 + button_size * 0, button_size, button_size, hWnd, (HMENU)ID_BUTTON_F2_3, hInstance, NULL);
+
+   HWND B_F2_4 = CreateWindowEx(WS_EX_CLIENTEDGE, L"BUTTON", L"4", WS_CHILD | WS_VISIBLE | WS_BORDER,
+	   40 + button_size * 0, 5 + margin + Floor_height * 2 + button_size * 0, button_size, button_size, hWnd, (HMENU)ID_BUTTON_F2_4, hInstance, NULL);
+
+
+   Floor_1_Passengrs = CreateWindowEx(WS_EX_CLIENTEDGE, L"EDIT", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER,
+	   40 + button_size * 1, 5 + margin + Floor_height * 3 + button_size * 2, button_size, button_size, hWnd, (HMENU)ID_EDIT_F1, hInstance, NULL);
+
+   HWND B_F1_0 = CreateWindowEx(WS_EX_CLIENTEDGE, L"BUTTON", L"0", WS_CHILD | WS_VISIBLE | WS_BORDER,
+	   40 + button_size * 0, 5 + margin + Floor_height * 3 + button_size * 2, button_size, button_size, hWnd, (HMENU)ID_BUTTON_F1_0, hInstance, NULL);
+
+   HWND B_F1_1 = CreateWindowEx(WS_EX_CLIENTEDGE, L"BUTTON", L"-", WS_CHILD | WS_VISIBLE | WS_BORDER,
+	   40 + button_size * 1, 5 + margin + Floor_height * 3 + button_size * 1, button_size, button_size, hWnd, (HMENU)ID_BUTTON_F1_1, hInstance, NULL);
+
+   HWND B_F1_2 = CreateWindowEx(WS_EX_CLIENTEDGE, L"BUTTON", L"2", WS_CHILD | WS_VISIBLE | WS_BORDER,
+	   40 + button_size * 0, 5 + margin + Floor_height * 3 + button_size * 1, button_size, button_size, hWnd, (HMENU)ID_BUTTON_F1_2, hInstance, NULL);
+
+   HWND B_F1_3 = CreateWindowEx(WS_EX_CLIENTEDGE, L"BUTTON", L"3", WS_CHILD | WS_VISIBLE | WS_BORDER,
+	   40 + button_size * 1, 5 + margin + Floor_height * 3 + button_size * 0, button_size, button_size, hWnd, (HMENU)ID_BUTTON_F1_3, hInstance, NULL);
+
+   HWND B_F1_4 = CreateWindowEx(WS_EX_CLIENTEDGE, L"BUTTON", L"4", WS_CHILD | WS_VISIBLE | WS_BORDER,
+	   40 + button_size * 0, 5 + margin + Floor_height * 3 + button_size * 0, button_size, button_size, hWnd, (HMENU)ID_BUTTON_F1_4, hInstance, NULL);
+
+
+   Floor_0_Passengrs = CreateWindowEx(WS_EX_CLIENTEDGE, L"EDIT", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER,
+	   40 + button_size * 1, 5 + margin + Floor_height * 4 + button_size * 2, button_size, button_size, hWnd, (HMENU)ID_EDIT_F0, hInstance, NULL);
+
+   HWND B_F0_0 = CreateWindowEx(WS_EX_CLIENTEDGE, L"BUTTON", L"-", WS_CHILD | WS_VISIBLE | WS_BORDER,
+	   40 + button_size * 0, 5 + margin + Floor_height * 4 + button_size * 2, button_size, button_size, hWnd, (HMENU)ID_BUTTON_F0_0, hInstance, NULL);
+
+   HWND B_F0_1 = CreateWindowEx(WS_EX_CLIENTEDGE, L"BUTTON", L"1", WS_CHILD | WS_VISIBLE | WS_BORDER,
+	   40 + button_size * 1, 5 + margin + Floor_height * 4 + button_size * 1, button_size, button_size, hWnd, (HMENU)ID_BUTTON_F0_1, hInstance, NULL);
+
+   HWND B_F0_2 = CreateWindowEx(WS_EX_CLIENTEDGE, L"BUTTON", L"2", WS_CHILD | WS_VISIBLE | WS_BORDER,
+	   40 + button_size * 0, 5 + margin + Floor_height * 4 + button_size * 1, button_size, button_size, hWnd, (HMENU)ID_BUTTON_F0_2, hInstance, NULL);
+
+   HWND B_F0_3 = CreateWindowEx(WS_EX_CLIENTEDGE, L"BUTTON", L"3", WS_CHILD | WS_VISIBLE | WS_BORDER,
+	   40 + button_size * 1, 5 + margin + Floor_height * 4 + button_size * 0, button_size, button_size, hWnd, (HMENU)ID_BUTTON_F0_3, hInstance, NULL);
+
+   HWND B_F0_4 = CreateWindowEx(WS_EX_CLIENTEDGE, L"BUTTON", L"4", WS_CHILD | WS_VISIBLE | WS_BORDER,
+	   40 + button_size * 0, 5 + margin + Floor_height * 4 + button_size * 0, button_size, button_size, hWnd, (HMENU)ID_BUTTON_F0_4, hInstance, NULL);
+
+#pragma endregion
 
    if (!hWnd)
    {
@@ -216,13 +361,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			Pen Pen(Color(255, 0, 0, 0), 2);
 			graphics.DrawLine(	&Pen,
 								Mainrect_x + Floor_width, 
-								Mainrect_y + 6,
+								Mainrect_y + margin,
 								Mainrect_x + Floor_width,
 								Mainrect_y + Elevator_height);
 
 			graphics.DrawLine(	&Pen,
 								Mainrect_x + Floor_width + Elevator_width,
-								Mainrect_y + 6, 
+								Mainrect_y + margin, 
 								Mainrect_x + Floor_width + Elevator_width, 
 								Mainrect_y + Elevator_height);
 
@@ -246,9 +391,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 			graphics.DrawLine(	&Pen,
 								Mainrect_x + Floor_width,
-								Mainrect_y + 6,
+								Mainrect_y + margin,
 								Mainrect_x + Floor_width + Elevator_width,
-								Mainrect_y + 6);
+								Mainrect_y + margin);
 
 			graphics.DrawLine(	&Pen,
 								Mainrect_x + Floor_width,
