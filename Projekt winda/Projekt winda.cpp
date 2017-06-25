@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include "Projekt winda.h"
+#include <deque>
 
 #define MAX_LOADSTRING 100
 
@@ -42,6 +43,18 @@
 #define ID_EDIT_F1 28
 #define ID_EDIT_F0 29
 
+#define TM_1 30
+#define TM_2 31
+
+struct ORDER
+{
+	int position;
+	int distance;
+	int direction;
+	int start;
+};
+
+std::deque <ORDER> Order;
 
 // Global Variables:
 HINSTANCE hInst;                                // current instance
@@ -53,7 +66,8 @@ HWND Floor_2_Passengrs;
 HWND Floor_1_Passengrs;
 HWND Floor_0_Passengrs;
 
-
+int TIME_1 = 0;
+int TIME_2 = 0;
 
 const int margin = 6;
 
@@ -82,9 +96,9 @@ RECT FLOOR_1 = { Mainrect_x, Mainrect_y + Floor_height *3, Mainrect_x + Floor_wi
 RECT FLOOR_0 = { Mainrect_x, Mainrect_y + Floor_height *4, Mainrect_x + Floor_width, Mainrect_y + Floor_height *5 };
 
 RECT ELEVATOR = {	Mainrect_x + Floor_width, 
-					Mainrect_y, 
+					Mainrect_y + margin + 1, 
 					Mainrect_x + Floor_width + Elevator_width,
-					Mainrect_y + Elevator_height };
+					Mainrect_y + Elevator_height - 1};
 
 RECT EXIT_4 = {		Mainrect_x + Floor_width + Elevator_width,
 					Mainrect_y + Exit_height * 0,
@@ -118,6 +132,162 @@ ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
+
+ORDER Load(int c_p, int dis, int st, int dir)
+{
+	ORDER buffor_load;
+	buffor_load.position = c_p;
+	buffor_load.distance = dis;
+	buffor_load.start = st;
+	buffor_load.direction = dir;
+	return buffor_load;
+}
+
+void Algorithm(int current_pos, int distance, int direction, int start, int element)
+{
+	ORDER buffor_check;
+	bool good_dir = false;
+	bool algorithm = false;
+	int up = -1;
+	int down = 1;
+	int size = Order.size();
+	std::deque<ORDER>::iterator it = Order.begin();					// iterator, to insert data in the middle of deque
+	it += element;
+
+	if (Order.empty())								// condition 1
+	{
+		Order.push_back(Load(current_pos, distance, start, direction));
+	}
+	// cond 1: check if it can be simply put in the back
+	// cond 2: check the opposit, obvious
+	// cond 3: check if directions of the orders are compatible
+	// cond 4: if so then check if elevator goes up
+	// cond 5: check which order is higher and which should be first
+	// cond 6: the opposite of cond 5
+	
+	else if(!Order.empty())														// condition 2
+	{
+		buffor_check = Order.at(element);
+		if (buffor_check.direction == direction)							// condition 3
+		{
+			if (direction == up)											// condition 4
+			{
+				if ((buffor_check.position > current_pos) && buffor_check.start - buffor_check.distance > start) // condition 5
+				{
+					if (element == 0)												// to avoid using insert when not necessary
+					{
+						Order.push_front(Load(current_pos, distance, start, direction));
+					}
+					else
+					{
+						Order.insert(it,Load(current_pos, distance, start, direction));
+					}
+				}
+				if ((buffor_check.position > current_pos) && buffor_check.start - buffor_check.distance < start) // condition 6
+				{
+					if (element == 0)												// to avoid using insert when not necessary
+					{
+						Order.push_front(Load(current_pos, distance, start, direction));
+					}
+					else
+					{
+						Order.insert(it, Load(current_pos, distance, start, direction));
+					}
+				}
+				if (buffor_check.position <= current_pos)					// condition 7
+				{
+					for (int i = element; i < size; i++)
+					{
+						buffor_check = Order.at(i);
+						if (buffor_check.direction == down)
+						{
+							good_dir = true;
+						}
+						if (buffor_check.direction == up && good_dir)
+						{
+							element = i;
+							algorithm = true;
+							break;
+						}
+					}
+					if (algorithm)
+					{
+						Algorithm(current_pos, distance, direction, start, element);  // condition 14
+					}
+					else
+					{
+						Order.push_back(Load(current_pos, distance, start, direction));
+					}
+				}
+			}
+			if (direction == down)
+			{
+				if ((buffor_check.position < current_pos) && buffor_check.start + buffor_check.distance < start);  // condition 9
+				{
+					if (element == 0)												// to avoid using insert when not necessary
+					{
+						Order.push_front(Load(current_pos, distance, start, direction));
+					}
+					else
+					{
+						Order.insert(it, Load(current_pos, distance, start, direction));
+					}
+				}
+				if ((buffor_check.position < current_pos) && buffor_check.start - buffor_check.distance > start) // condition 10
+				{
+					Order.insert(it, Load(current_pos, distance, start, direction));
+				}
+				if (buffor_check.position >= current_pos)					// condition 11
+				{
+					for (int i = element; i < size; i++)
+					{
+						buffor_check = Order.at(i);
+						if (buffor_check.direction == up)
+						{
+							good_dir = true;
+						}
+						if (buffor_check.direction == down && good_dir)
+						{
+							element = i;
+							algorithm = true;
+							break;
+						}
+					}
+					if (algorithm)
+					{
+						Algorithm(current_pos, distance, direction, start, element);  // condition 12
+					}
+					else
+					{
+						Order.push_back(Load(current_pos, distance, start, direction));
+					}
+				}
+			}
+		}
+		if (buffor_check.direction != direction)
+		{
+			for (int i = element; i < size; i++)
+			{
+				buffor_check = Order.at(i);
+				if (buffor_check.direction == direction)
+				{
+					element = i;
+					algorithm = true;
+					break;
+				}
+			}
+			if (algorithm)
+			{
+				Algorithm(current_pos, distance, direction, start, element);  // condition 13
+			}
+			else
+			{
+				Order.push_back(Load(current_pos, distance, start, direction));
+			}
+		}
+	}
+}
+
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -332,6 +502,32 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+static bool first_update = true;
+static bool next = true;
+Pen Red_Pen(Color(255, 0, 0), 3);
+Pen Black_Pen(Color(255, 0, 0, 0), 2);
+Pen Green_Pen(Color(0, 255, 0), 3);
+
+int up = -1;
+int down = 1;
+static int distance = 0;
+static int direction = 0;
+static int start = Mainrect_y + Floor_height * 4 + 10;
+static int current_pos = Mainrect_y + Floor_height * 4 + 10;
+
+static int old_POSITION = current_pos;
+
+static ORDER buffor_check;
+static ORDER buffor_do;
+static bool up_or_down;
+static bool change = false;
+
+static int POSITION = current_pos;
+static int DISTANCE;
+static int DIRECTION;
+static int START;
+static ORDER BUFF;
+
     switch (message)
     {
     case WM_COMMAND:
@@ -346,61 +542,327 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             case IDM_EXIT:
                 DestroyWindow(hWnd);
                 break;
+#pragma region Idbuttons
+			case ID_BUTTON_F0_1:
+				distance = Floor_height * 1;
+				direction = up;
+				current_pos = Mainrect_y + Floor_height * 4 + 10;
+				start = current_pos;
+				Algorithm(current_pos, distance, direction, start, 0);
+				SetTimer(hWnd, TM_1, 25, NULL);
+				break;
+			case ID_BUTTON_F0_2:
+				distance = Floor_height * 2;
+				direction = up;
+				current_pos = Mainrect_y + Floor_height * 4 + 10;
+				start = current_pos;
+				Algorithm(current_pos, distance, direction, start, 0);
+				SetTimer(hWnd, TM_1, 25, NULL);
+				break;
+			case ID_BUTTON_F0_3:
+				distance = Floor_height * 3;
+				direction = up;
+				current_pos = Mainrect_y + Floor_height * 4 + 10;
+				start = current_pos;
+				Algorithm(current_pos, distance, direction, start, 0);
+				SetTimer(hWnd, TM_1, 25, NULL);
+				break;
+			case ID_BUTTON_F0_4:
+				distance = Floor_height * 4;
+				direction = up;
+				current_pos = Mainrect_y + Floor_height * 4 + 10;
+				start = current_pos;
+				Algorithm(current_pos, distance, direction, start, 0);
+				SetTimer(hWnd, TM_1, 25, NULL);
+				break;
+			case ID_BUTTON_F1_0:
+				distance = Floor_height * 1;
+				direction = down;
+				current_pos = Mainrect_y + Floor_height * 3 + 10;
+				start = current_pos;
+				Algorithm(current_pos, distance, direction, start, 0);
+				SetTimer(hWnd, TM_1, 25, NULL);
+				break;
+			case ID_BUTTON_F1_2:
+				distance = Floor_height * 1;
+				direction = up;
+				current_pos = Mainrect_y + Floor_height * 3 + 10;
+				start = current_pos;
+				Algorithm(current_pos, distance, direction, start, 0);
+				SetTimer(hWnd, TM_1, 25, NULL);
+				break;
+			case ID_BUTTON_F1_3:
+				distance = Floor_height * 2;
+				direction = up;
+				current_pos = Mainrect_y + Floor_height * 3 + 10;
+				start = current_pos;
+				Algorithm(current_pos, distance, direction, start, 0);
+				SetTimer(hWnd, TM_1, 25, NULL);
+				break;
+			case ID_BUTTON_F1_4:
+				distance = Floor_height * 3;
+				direction = up;
+				current_pos = Mainrect_y + Floor_height * 3 + 10;
+				start = current_pos;
+				Algorithm(current_pos, distance, direction, start, 0);
+				SetTimer(hWnd, TM_1, 25, NULL);
+				break;
+			case ID_BUTTON_F2_0:
+				distance = Floor_height * 2;
+				direction = down;
+				current_pos = Mainrect_y + Floor_height * 2 + 10;
+				start = current_pos;
+				Algorithm(current_pos, distance, direction, start, 0);
+				SetTimer(hWnd, TM_1, 25, NULL);
+				break;
+			case ID_BUTTON_F2_1:
+				distance = Floor_height * 1;
+				direction = down;
+				current_pos = Mainrect_y + Floor_height * 2 + 10;
+				start = current_pos;
+				Algorithm(current_pos, distance, direction, start, 0);
+				SetTimer(hWnd, TM_1, 25, NULL);
+				break;
+			case ID_BUTTON_F2_3:
+				distance = Floor_height * 1;
+				direction = up;
+				current_pos = Mainrect_y + Floor_height * 2 + 10;
+				start = current_pos;
+				Algorithm(current_pos, distance, direction, start, 0);
+				SetTimer(hWnd, TM_1, 25, NULL);
+				break;
+			case ID_BUTTON_F2_4:
+				distance = Floor_height * 2;
+				direction = up;
+				current_pos = Mainrect_y + Floor_height * 2 + 10;
+				start = current_pos;
+				Algorithm(current_pos, distance, direction, start, 0);
+				SetTimer(hWnd, TM_1, 25, NULL);
+				break;
+			case ID_BUTTON_F3_0:
+				distance = Floor_height * 3;
+				direction = down;
+				current_pos = Mainrect_y + Floor_height * 1 + 10;
+				start = current_pos;
+				Algorithm(current_pos, distance, direction, start, 0);
+				SetTimer(hWnd, TM_1, 25, NULL);
+				break;
+			case ID_BUTTON_F3_1:
+				distance = Floor_height * 2;
+				direction = down;
+				current_pos = Mainrect_y + Floor_height * 1 + 10;
+				start = current_pos;
+				Algorithm(current_pos, distance, direction, start, 0);
+				SetTimer(hWnd, TM_1, 25, NULL);
+				break;
+			case ID_BUTTON_F3_2:
+				distance = Floor_height * 1;
+				direction = down;
+				current_pos = Mainrect_y + Floor_height * 1 + 10;
+				start = current_pos;
+				Algorithm(current_pos, distance, direction, start, 0);
+				SetTimer(hWnd, TM_1, 25, NULL);
+				break;
+			case ID_BUTTON_F3_4:
+				distance = Floor_height * 1;
+				direction = up;
+				current_pos = Mainrect_y + Floor_height * 1 + 10;
+				start = current_pos;
+				Algorithm(current_pos, distance, direction, start, 0);
+				SetTimer(hWnd, TM_1, 25, NULL);
+				break;
+			case ID_BUTTON_F4_0:
+				distance = Floor_height * 4;
+				direction = down;
+				current_pos = Mainrect_y + Floor_height * 0 + 10;
+				start = current_pos;
+				Algorithm(current_pos, distance, direction, start, 0);
+				SetTimer(hWnd, TM_1, 25, NULL);
+				break;
+			case ID_BUTTON_F4_1:
+				distance = Floor_height * 3;
+				direction = down;
+				current_pos = Mainrect_y + Floor_height * 0 + 10;
+				start = current_pos;
+				Algorithm(current_pos, distance, direction, start, 0);
+				SetTimer(hWnd, TM_1, 25, NULL);
+				break;
+			case ID_BUTTON_F4_2:
+				distance = Floor_height * 2;
+				direction = down;
+				current_pos = Mainrect_y + Floor_height * 0 + 10;
+				start = current_pos;
+				Algorithm(current_pos, distance, direction, start, 0);
+				SetTimer(hWnd, TM_1, 25, NULL);
+				break;
+			case ID_BUTTON_F4_3:
+				distance = Floor_height * 1;
+				direction = down;
+				current_pos = Mainrect_y + Floor_height * 0 + 10;
+				start = current_pos;
+				Algorithm(current_pos, distance, direction, start, 0);
+				SetTimer(hWnd, TM_1, 25, NULL);
+				break;
+#pragma endregion
             default:
                 return DefWindowProc(hWnd, message, wParam, lParam);
             }
         }
         break;
     case WM_PAINT:
-        {
-            PAINTSTRUCT ps;
-            HDC hdc = BeginPaint(hWnd, &ps);
-
-#pragma region Frame 
+        {		
+			PAINTSTRUCT ps;
+			HDC hdc = BeginPaint(hWnd, &ps);
 			Graphics graphics(hdc);
-			Pen Pen(Color(255, 0, 0, 0), 2);
-			graphics.DrawLine(	&Pen,
+#pragma region Frame 
+			
+			// left wall of a shaft
+			graphics.DrawLine(	&Black_Pen,
 								Mainrect_x + Floor_width, 
 								Mainrect_y + margin,
 								Mainrect_x + Floor_width,
 								Mainrect_y + Elevator_height);
 
-			graphics.DrawLine(	&Pen,
+			// right wall of a shaft
+			graphics.DrawLine(	&Black_Pen,
 								Mainrect_x + Floor_width + Elevator_width,
 								Mainrect_y + margin, 
 								Mainrect_x + Floor_width + Elevator_width, 
 								Mainrect_y + Elevator_height);
 
+			// floors
 			for (int i = 1; i <= 5; i++) 
 			{
-				graphics.DrawLine(	&Pen,
+				graphics.DrawLine(	&Black_Pen,
 									Mainrect_x,
 									Mainrect_y + Floor_height * i,
 									Mainrect_x + Floor_width,
 									Mainrect_y + Floor_height * i);
 			}
 
+			// exits
 			for (int i = 1; i <= 5; i++)
 			{
-				graphics.DrawLine(	&Pen,
+				graphics.DrawLine(	&Black_Pen,
 									Mainrect_x + Floor_width + Elevator_width,
 									Mainrect_y + Floor_height * i,
 									Mainrect_x + Floor_width + Elevator_width + Exit_width,
 									Mainrect_y + Floor_height * i);
 			}
 
-			graphics.DrawLine(	&Pen,
+			// roof of a shaft
+			graphics.DrawLine(	&Black_Pen,
 								Mainrect_x + Floor_width,
 								Mainrect_y + margin,
 								Mainrect_x + Floor_width + Elevator_width,
 								Mainrect_y + margin);
 
-			graphics.DrawLine(	&Pen,
+			// bottom of a shaft
+			graphics.DrawLine(	&Black_Pen,
 								Mainrect_x + Floor_width,
 								Mainrect_y + Elevator_height,
 								Mainrect_x + Floor_width + Elevator_width,
 								Mainrect_y + Elevator_height);
 #pragma endregion
+			
+			if (!Order.empty() && next)
+			{
+				BUFF = Order.front();
+				DIRECTION = BUFF.direction;
+				START = BUFF.start;
+				DISTANCE = BUFF.distance;
+				POSITION = BUFF.position;
+
+				if (old_POSITION < START)
+				{
+					up_or_down = false;
+					graphics.DrawRectangle(&Red_Pen,
+						Mainrect_x + Floor_width + 10,
+						old_POSITION,
+						Elevator_width - 4 * 5,
+						Floor_height - 11);
+
+					old_POSITION = old_POSITION + 2;
+				}
+				else if (old_POSITION > START)
+				{
+					up_or_down = true;
+					graphics.DrawRectangle(&Red_Pen,
+						Mainrect_x + Floor_width + 10,
+						old_POSITION,
+						Elevator_width - 4 * 5,
+						Floor_height - 11);
+
+					old_POSITION = old_POSITION - 2;
+				}
+
+				if (old_POSITION == START)
+				{
+					if (Order.size() >= 2)
+					{
+						buffor_check = Order.at(1);
+						if (up_or_down)
+						{
+							if (buffor_check.start < START)
+							{
+								Order.push_front(buffor_check);
+								Order.erase(Order.begin() + 2);
+								change = true;
+							}
+						}
+						else
+						{
+							if (buffor_check.start > START)
+							{
+								Order.push_front(buffor_check);
+								Order.erase(Order.begin() + 2);
+								change = true;
+							}
+						}
+					}
+					if (change)
+					{
+						change = false;
+					}
+					else
+					{
+						next = false;
+						old_POSITION = POSITION + DISTANCE*DIRECTION;
+					}
+					Sleep(3000);
+				}
+			}
+			else if (!(POSITION == START + DISTANCE*DIRECTION))
+			{
+				//KillTimer(hWnd, TM_2);
+				//TIME_2 = 0;
+				graphics.DrawRectangle(&Red_Pen,
+					Mainrect_x + Floor_width + 10,
+					POSITION,
+					Elevator_width - 4 * 5,
+					Floor_height - 11);
+					POSITION = POSITION + (2*DIRECTION);
+					BUFF.position = POSITION;
+					if (!Order.empty()) Order.front() = BUFF;
+			}
+			else if(POSITION == START + DISTANCE*DIRECTION /*&& TIME_2 < 5*/)
+			{
+				//KillTimer(hWnd, TM_1);
+				//SetTimer(hWnd, TM_2, 1000, NULL);
+				graphics.DrawRectangle(&Green_Pen,
+					Mainrect_x + Floor_width + 10,
+					POSITION,
+					Elevator_width - 4 * 5,
+					Floor_height - 11);
+				if (!Order.empty())
+				{
+					Sleep(3000);
+					Order.pop_front();
+					next = true;
+				}
+			}
+
+			
 
             // TODO: Add any drawing code that uses hdc here...
 			/*FillRect(hdc, &MAINRECT, (HBRUSH)(COLOR_WINDOW + 13));
@@ -419,9 +881,30 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			LineTo(hdc, Mainrect_x + Floor_width, Mainrect_y + Elevator_height);
 			MoveToEx(hdc, Mainrect_x + Floor_width + Elevator_width, Mainrect_y, NULL);
 			LineTo(hdc, Mainrect_x + Floor_width + Elevator_width, Mainrect_y + Elevator_height);*/
+			//FillRect(hdc, &ELEVATOR, (HBRUSH)(COLOR_WINDOW + 14));
+
+			if (first_update)
+			{
+				InvalidateRect(hWnd, &MAINRECT, TRUE);
+				//SetTimer(hWnd,TM_1, 25, NULL);
+				first_update = false;
+			}
+
             EndPaint(hWnd, &ps);
         }
         break;
+	case WM_TIMER:
+		switch(wParam)
+			{
+			case TM_1:
+				InvalidateRect(hWnd, &ELEVATOR, TRUE);
+				TIME_1++;
+				break;
+			case TM_2:
+				TIME_2++;
+				break;
+			}
+			break;
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
