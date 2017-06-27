@@ -1,2 +1,4 @@
-﻿  Projekt winda.vcxproj -> C:\Users\Jakub\Documents\GitHub\TP_2017\Debug\Projekt winda.exe
+﻿  Projekt winda.cpp
+c:\users\jakub\documents\github\tp_2017\projekt winda\projekt winda.cpp(768): warning C4018: '<': signed/unsigned mismatch
+  Projekt winda.vcxproj -> C:\Users\Jakub\Documents\GitHub\TP_2017\Debug\Projekt winda.exe
   Projekt winda.vcxproj -> C:\Users\Jakub\Documents\GitHub\TP_2017\Debug\Projekt winda.pdb (Partial PDB)
