@@ -37,14 +37,8 @@
 #define ID_BUTTON_F0_3 23
 #define ID_BUTTON_F0_4 24
 
-#define ID_EDIT_F4 25
-#define ID_EDIT_F3 26
-#define ID_EDIT_F2 27
-#define ID_EDIT_F1 28
-#define ID_EDIT_F0 29
-
-#define TM_1 30
-#define TM_2 31
+#define TM_1 25
+#define TM_2 26
 
 struct ORDER
 {
@@ -61,11 +55,7 @@ std::deque <ORDER> Order;
 HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
-HWND Floor_4_Passengrs;
-HWND Floor_3_Passengrs;
-HWND Floor_2_Passengrs;
-HWND Floor_1_Passengrs;
-HWND Floor_0_Passengrs;
+
 
 int TIME_1 = 0;
 int TIME_2 = 0;
@@ -144,152 +134,6 @@ void Load(int to, int where, int dir, bool b_to, bool b_where)
 	buffor_load.b_where = b_where;
 	Order.push_back(buffor_load);
 }
-
-//void Algorithm(int current_pos, int distance, int direction, int start, int element)
-//{
-//	ORDER buffor_check;
-//	bool good_dir = false;
-//	bool algorithm = false;
-//	int up = -1;
-//	int down = 1;
-//	int size = Order.size();
-//	std::deque<ORDER>::iterator it = Order.begin();					// iterator, to insert data in the middle of deque
-//	it += element;
-//
-//	if (Order.empty())								// condition 1
-//	{
-//		Order.push_back(Load(current_pos, distance, start, direction));
-//	}
-//	// cond 1: check if it can be simply put in the back
-//	// cond 2: check the opposit, obvious
-//	// cond 3: check if directions of the orders are compatible
-//	// cond 4: if so then check if elevator goes up
-//	// cond 5: check which order is higher and which should be first
-//	// cond 6: the opposite of cond 5
-//	
-//	else if(!Order.empty())														// condition 2
-//	{
-//		buffor_check = Order.at(element);
-//		if (buffor_check.direction == direction)							// condition 3
-//		{
-//			if (direction == up)											// condition 4
-//			{
-//				if ((buffor_check.position > current_pos) && buffor_check.start - buffor_check.distance > start) // condition 5
-//				{
-//					if (element == 0)												// to avoid using insert when not necessary
-//					{
-//						Order.push_front(Load(current_pos, distance, start, direction));
-//					}
-//					else
-//					{
-//						Order.insert(it,Load(current_pos, distance, start, direction));
-//					}
-//				}
-//				if ((buffor_check.position > current_pos) && buffor_check.start - buffor_check.distance < start) // condition 6
-//				{
-//					if (element == 0)												// to avoid using insert when not necessary
-//					{
-//						Order.push_front(Load(current_pos, distance, start, direction));
-//					}
-//					else
-//					{
-//						Order.insert(it, Load(current_pos, distance, start, direction));
-//					}
-//				}
-//				if (buffor_check.position <= current_pos)					// condition 7
-//				{
-//					for (int i = element; i < size; i++)
-//					{
-//						buffor_check = Order.at(i);
-//						if (buffor_check.direction == down)
-//						{
-//							good_dir = true;
-//						}
-//						if (buffor_check.direction == up && good_dir)
-//						{
-//							element = i;
-//							algorithm = true;
-//							break;
-//						}
-//					}
-//					if (algorithm)
-//					{
-//						Algorithm(current_pos, distance, direction, start, element);  // condition 14
-//					}
-//					else
-//					{
-//						Order.push_back(Load(current_pos, distance, start, direction));
-//					}
-//				}
-//			}
-//			if (direction == down)
-//			{
-//				if ((buffor_check.position < current_pos) && buffor_check.start + buffor_check.distance < start);  // condition 9
-//				{
-//					if (element == 0)												// to avoid using insert when not necessary
-//					{
-//						Order.push_front(Load(current_pos, distance, start, direction));
-//					}
-//					else
-//					{
-//						Order.insert(it, Load(current_pos, distance, start, direction));
-//					}
-//				}
-//				if ((buffor_check.position < current_pos) && buffor_check.start - buffor_check.distance > start) // condition 10
-//				{
-//					Order.insert(it, Load(current_pos, distance, start, direction));
-//				}
-//				if (buffor_check.position >= current_pos)					// condition 11
-//				{
-//					for (int i = element; i < size; i++)
-//					{
-//						buffor_check = Order.at(i);
-//						if (buffor_check.direction == up)
-//						{
-//							good_dir = true;
-//						}
-//						if (buffor_check.direction == down && good_dir)
-//						{
-//							element = i;
-//							algorithm = true;
-//							break;
-//						}
-//					}
-//					if (algorithm)
-//					{
-//						Algorithm(current_pos, distance, direction, start, element);  // condition 12
-//					}
-//					else
-//					{
-//						Order.push_back(Load(current_pos, distance, start, direction));
-//					}
-//				}
-//			}
-//		}
-//		if (buffor_check.direction != direction)
-//		{
-//			for (int i = element; i < size; i++)
-//			{
-//				buffor_check = Order.at(i);
-//				if (buffor_check.direction == direction)
-//				{
-//					element = i;
-//					algorithm = true;
-//					break;
-//				}
-//			}
-//			if (algorithm)
-//			{
-//				Algorithm(current_pos, distance, direction, start, element);  // condition 13
-//			}
-//			else
-//			{
-//				Order.push_back(Load(current_pos, distance, start, direction));
-//			}
-//		}
-//	}
-//}
-
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -385,9 +229,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 #pragma region Buttons
 
-   Floor_4_Passengrs = CreateWindowEx(WS_EX_CLIENTEDGE, L"EDIT", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER,
-	   40 + button_size * 1, 5 + margin + Floor_height * 0 + button_size * 2, button_size, button_size, hWnd, (HMENU)ID_EDIT_F4, hInstance, NULL);
-
    HWND B_F4_0 = CreateWindowEx(WS_EX_CLIENTEDGE, L"BUTTON", L"0", WS_CHILD | WS_VISIBLE | WS_BORDER,
 	   40 + button_size * 0, 5 + margin + Floor_height * 0 + button_size * 2, button_size, button_size, hWnd, (HMENU)ID_BUTTON_F4_0, hInstance, NULL);
 
@@ -403,9 +244,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    HWND B_F4_4 = CreateWindowEx(WS_EX_CLIENTEDGE, L"BUTTON", L"-", WS_CHILD | WS_VISIBLE | WS_BORDER,
 	   40 + button_size * 0, 5 + margin + Floor_height * 0 + button_size * 0, button_size, button_size, hWnd, (HMENU)ID_BUTTON_F4_4, hInstance, NULL);
 
-
-   Floor_3_Passengrs = CreateWindowEx(WS_EX_CLIENTEDGE, L"EDIT", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER,
-	   40 + button_size * 1, 5 + margin + Floor_height * 1 + button_size * 2, button_size, button_size, hWnd, (HMENU)ID_EDIT_F3, hInstance, NULL);
 
    HWND B_F3_0 = CreateWindowEx(WS_EX_CLIENTEDGE, L"BUTTON", L"0", WS_CHILD | WS_VISIBLE | WS_BORDER,
 	   40 + button_size * 0, 5 + margin + Floor_height * 1 + button_size * 2, button_size, button_size, hWnd, (HMENU)ID_BUTTON_F3_0, hInstance, NULL);
@@ -423,9 +261,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	   40 + button_size * 0, 5 + margin + Floor_height * 1 + button_size * 0, button_size, button_size, hWnd, (HMENU)ID_BUTTON_F3_4, hInstance, NULL);
 
 
-   Floor_2_Passengrs = CreateWindowEx(WS_EX_CLIENTEDGE, L"EDIT", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER,
-	   40 + button_size * 1, 5 + margin + Floor_height * 2 + button_size * 2, button_size, button_size, hWnd, (HMENU)ID_EDIT_F2, hInstance, NULL);
-
    HWND B_F2_0 = CreateWindowEx(WS_EX_CLIENTEDGE, L"BUTTON", L"0", WS_CHILD | WS_VISIBLE | WS_BORDER,
 	   40 + button_size * 0, 5 + margin + Floor_height * 2 + button_size * 2, button_size, button_size, hWnd, (HMENU)ID_BUTTON_F2_0, hInstance, NULL);
 
@@ -442,9 +277,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	   40 + button_size * 0, 5 + margin + Floor_height * 2 + button_size * 0, button_size, button_size, hWnd, (HMENU)ID_BUTTON_F2_4, hInstance, NULL);
 
 
-   Floor_1_Passengrs = CreateWindowEx(WS_EX_CLIENTEDGE, L"EDIT", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER,
-	   40 + button_size * 1, 5 + margin + Floor_height * 3 + button_size * 2, button_size, button_size, hWnd, (HMENU)ID_EDIT_F1, hInstance, NULL);
-
    HWND B_F1_0 = CreateWindowEx(WS_EX_CLIENTEDGE, L"BUTTON", L"0", WS_CHILD | WS_VISIBLE | WS_BORDER,
 	   40 + button_size * 0, 5 + margin + Floor_height * 3 + button_size * 2, button_size, button_size, hWnd, (HMENU)ID_BUTTON_F1_0, hInstance, NULL);
 
@@ -460,9 +292,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    HWND B_F1_4 = CreateWindowEx(WS_EX_CLIENTEDGE, L"BUTTON", L"4", WS_CHILD | WS_VISIBLE | WS_BORDER,
 	   40 + button_size * 0, 5 + margin + Floor_height * 3 + button_size * 0, button_size, button_size, hWnd, (HMENU)ID_BUTTON_F1_4, hInstance, NULL);
 
-
-   Floor_0_Passengrs = CreateWindowEx(WS_EX_CLIENTEDGE, L"EDIT", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER,
-	   40 + button_size * 1, 5 + margin + Floor_height * 4 + button_size * 2, button_size, button_size, hWnd, (HMENU)ID_EDIT_F0, hInstance, NULL);
 
    HWND B_F0_0 = CreateWindowEx(WS_EX_CLIENTEDGE, L"BUTTON", L"-", WS_CHILD | WS_VISIBLE | WS_BORDER,
 	   40 + button_size * 0, 5 + margin + Floor_height * 4 + button_size * 2, button_size, button_size, hWnd, (HMENU)ID_BUTTON_F0_0, hInstance, NULL);
@@ -527,25 +356,6 @@ static bool done = true;
 static bool waited = false;
 
 static int current_position = Mainrect_y + Floor_height * 4 + 10;
-
-//static bool next = true;
-//static int distance = 0;
-//static int direction = 0;
-//static int start = Mainrect_y + Floor_height * 4 + 10;
-//static int current_pos = Mainrect_y + Floor_height * 4 + 10;
-//
-//static int old_POSITION = current_pos;
-//
-//static ORDER buffor_check;
-//static ORDER buffor_do;
-//static bool up_or_down;
-//static bool change = false;
-//
-//static int POSITION = current_pos;
-//static int DISTANCE;
-//static int DIRECTION;
-//static int START;
-//static ORDER BUFF;
 
     switch (message)
     {
@@ -765,12 +575,14 @@ static int current_position = Mainrect_y + Floor_height * 4 + 10;
 #pragma endregion
 			if (!Order.empty())
 			{
+				KillTimer(hWnd, TM_2);
+
 				if (size < Order.size() && done || waited)
 				{
 					if (waited && current_position == main_target || Order.size() == 1)
 					{
 						size = Order.size();
-						if (elev_direction != 0)
+						if (elev_direction != 0 && Order.size()!=1)
 						{
 							for (int i = 0; i < size; i++)
 							{
@@ -778,15 +590,45 @@ static int current_position = Mainrect_y + Floor_height * 4 + 10;
 								buffor.b_to ? target = buffor.where : target = buffor.to;
 								elev_direction == up
 									?
-								(target < current_position ? main_target = target : target = target)
+								(target < main_target ? main_target = target : target = target)
 									:
-								(target > current_position ? main_target = target : target = target);
+								(target > main_target ? main_target = target : target = target);
 							}
 						}
-						else
+
+						if(elev_direction == 0 || elev_direction != 0 && Order.size() == 1)
 						{
 							buffor = Order.front();
-							main_target = buffor.to;
+							if (buffor.to != current_position)
+							{
+								if (current_position > buffor.to && current_position > buffor.where)
+								{
+									elev_direction = up;
+									buffor.to < buffor.where ? main_target = buffor.to : main_target = buffor.where;
+								}
+								else if (current_position < buffor.to && current_position < buffor.where)
+								{
+									elev_direction = down;
+									buffor.to > buffor.where ? main_target = buffor.to : main_target = buffor.where;
+								}
+								else if (current_position > buffor.to)
+								{
+									elev_direction = up;
+									main_target = buffor.to;
+								}
+								else if (current_position < buffor.to)
+								{
+									elev_direction = down;
+									main_target = buffor.to;
+								}
+							}
+							else
+							{
+								main_target = buffor.where;
+								buffor.b_to = true;
+								Order.front() = buffor;
+								if(elev_direction == 0) stop = true;
+							}
 							main_target < current_position ? elev_direction = up : elev_direction = down;
 						}
 					}
@@ -806,20 +648,17 @@ static int current_position = Mainrect_y + Floor_height * 4 + 10;
 
 					if (current_position % Floor_height == Mainrect_y + 10 && current_position != main_target)
 					{
+						size = Order.size();
 						for (int i = 0; i < size; i++)
 						{
 							buffor = Order.at(i);
 							if (buffor.to == current_position && buffor.b_to == false && buffor.direction == elev_direction)
 							{
 								stop = true;
-								buffor.b_to = true;
-								Order.at(i) = buffor;
 							}
 							if (buffor.where == current_position && buffor.b_to == true)
 							{
 								stop = true;
-								buffor.b_where = true;
-								Order.at(i) = buffor;
 							}
 						}
 					}
@@ -841,13 +680,29 @@ static int current_position = Mainrect_y + Floor_height * 4 + 10;
 						Elevator_width - 4 * 5,
 						Floor_height - 11);
 
-					if (TIME_2 > 10)
+					if (TIME_2 == 0 || TIME_2 == 15)
+					{
+						size = Order.size();
+						for (int i = 0; i < size; i++)
+						{
+							buffor = Order.at(i);
+							if (current_position == buffor.to)
+							{
+								buffor.b_to = true;
+								Order.at(i) = buffor;
+							}
+							if (current_position == buffor.where)
+							{
+								buffor.b_where = true;
+								Order.at(i) = buffor;
+							}
+						}
+					}
+
+					if (TIME_2 > 15)
 					{
 						if (current_position == main_target)
 						{
-							buffor = Order.front();
-							buffor.b_to ? buffor.b_where = true : buffor.b_to = true;
-							Order.front() = buffor;
 							for (int i = 0; i < size; i++)
 							{
 								buffor = Order.at(i);
@@ -858,51 +713,21 @@ static int current_position = Mainrect_y + Floor_height * 4 + 10;
 									size--;
 								}
 							}
-							size = Order.size();
-						//	if (!Order.size())
-						//	{
-						//		for (int i = 0; i < size; i++)
-						//		{
-						//			buffor = Order.at(i);
-						//			buffor.b_to ? target = buffor.where : target = buffor.to;
-						//			elev_direction == up													// wow
-						//				?																	//
-						//			(target < main_target ? main_target = target : target = target)			//
-						//				:																	//
-						//			(target > main_target ? main_target = target : target = target);		//
-						//		}
-						//	}
-						//	else if(current_position != Mainrect_y + Floor_height * 4 + 10)
-						//	{
-						//		done = false;
-
-						//		graphics.DrawRectangle(&Red_Pen,
-						//			Mainrect_x + Floor_width + 10,
-						//			current_position,
-						//			Elevator_width - 4 * 5,
-						//			Floor_height - 11);
-
-						//		if (TIME_2 > 10)
-						//		{
-						//			done = false;
-						//			Order.empty();
-						//			Load(current_position, Mainrect_y + Floor_height * 4 + 10, down, true, false);
-						//		}
-						//	}							
+							size = Order.size();												
 						}
-						if (done)
-						{
 							KillTimer(hWnd, TM_2);
 							TIME_2 = 0;
 							waited = true;
 							SetTimer(hWnd, TM_1, 25, NULL);
 							stop = false;
-						}
 					}
 				}
 			}
 			else
 			{
+				KillTimer(hWnd, TM_1);
+				SetTimer(hWnd, TM_2, 25, NULL);
+
 				graphics.DrawRectangle(&Red_Pen,
 					Mainrect_x + Floor_width + 10,
 					current_position,
@@ -910,129 +735,20 @@ static int current_position = Mainrect_y + Floor_height * 4 + 10;
 					Floor_height - 11);
 
 				elev_direction = 0;
+
+				if (TIME_2 > 200 && current_position != Mainrect_y + Floor_height * 4 + 10)
+				{
+					current_position += 2;
+				}
+
+				current_position == Mainrect_y + Floor_height * 4 + 10 ? TIME_2 = 0 : TIME_2 = TIME_2;
 			}
-			//if (!Order.empty() && next)
-			//{
-			//	BUFF = Order.front();
-			//	DIRECTION = BUFF.direction;
-			//	START = BUFF.start;
-			//	DISTANCE = BUFF.distance;
-			//	POSITION = BUFF.position;
-
-			//	if (old_POSITION < START)
-			//	{
-			//		up_or_down = false;
-			//		graphics.DrawRectangle(&Red_Pen,
-			//			Mainrect_x + Floor_width + 10,
-			//			old_POSITION,
-			//			Elevator_width - 4 * 5,
-			//			Floor_height - 11);
-
-			//		old_POSITION = old_POSITION + 2;
-			//	}
-			//	else if (old_POSITION > START)
-			//	{
-			//		up_or_down = true;
-			//		graphics.DrawRectangle(&Red_Pen,
-			//			Mainrect_x + Floor_width + 10,
-			//			old_POSITION,
-			//			Elevator_width - 4 * 5,
-			//			Floor_height - 11);
-
-			//		old_POSITION = old_POSITION - 2;
-			//	}
-
-			//	if (old_POSITION == START)
-			//	{
-			//		if (Order.size() >= 2)
-			//		{
-			//			buffor_check = Order.at(1);
-			//			if (up_or_down)
-			//			{
-			//				if (buffor_check.start < START)
-			//				{
-			//					Order.push_front(buffor_check);
-			//					Order.erase(Order.begin() + 2);
-			//					change = true;
-			//				}
-			//			}
-			//			else
-			//			{
-			//				if (buffor_check.start > START)
-			//				{
-			//					Order.push_front(buffor_check);
-			//					Order.erase(Order.begin() + 2);
-			//					change = true;
-			//				}
-			//			}
-			//		}
-			//		if (change)
-			//		{
-			//			change = false;
-			//		}
-			//		else
-			//		{
-			//			next = false;
-			//			old_POSITION = POSITION + DISTANCE*DIRECTION;
-			//		}
-			//		Sleep(3000);
-			//	}
-			//}
-			//else if (!(POSITION == START + DISTANCE*DIRECTION))
-			//{
-			//	//KillTimer(hWnd, TM_2);
-			//	//TIME_2 = 0;
-			//	graphics.DrawRectangle(&Red_Pen,
-			//		Mainrect_x + Floor_width + 10,
-			//		POSITION,
-			//		Elevator_width - 4 * 5,
-			//		Floor_height - 11);
-			//		POSITION = POSITION + (2*DIRECTION);
-			//		BUFF.position = POSITION;
-			//		if (!Order.empty()) Order.front() = BUFF;
-			//}
-			//else if(POSITION == START + DISTANCE*DIRECTION /*&& TIME_2 < 5*/)
-			//{
-			//	//KillTimer(hWnd, TM_1);
-			//	//SetTimer(hWnd, TM_2, 1000, NULL);
-			//	graphics.DrawRectangle(&Green_Pen,
-			//		Mainrect_x + Floor_width + 10,
-			//		POSITION,
-			//		Elevator_width - 4 * 5,
-			//		Floor_height - 11);
-			//	if (!Order.empty())
-			//	{
-			//		Sleep(3000);
-			//		Order.pop_front();
-			//		next = true;
-			//	}
-			//}
-
 			
-
             // TODO: Add any drawing code that uses hdc here...
-			/*FillRect(hdc, &MAINRECT, (HBRUSH)(COLOR_WINDOW + 13));
-			FillRect(hdc, &FLOOR_4, (HBRUSH)(COLOR_WINDOW + 9));
-			FillRect(hdc, &FLOOR_3, (HBRUSH)(COLOR_WINDOW + 8));
-			FillRect(hdc, &FLOOR_2, (HBRUSH)(COLOR_WINDOW + 7));
-			FillRect(hdc, &FLOOR_1, (HBRUSH)(COLOR_WINDOW + 6));
-			FillRect(hdc, &FLOOR_0, (HBRUSH)(COLOR_WINDOW + 5));
-			FillRect(hdc, &ELEVATOR, (HBRUSH)(COLOR_WINDOW + 14));
-			FillRect(hdc, &EXIT_4, (HBRUSH)(COLOR_WINDOW + 9));
-			FillRect(hdc, &EXIT_3, (HBRUSH)(COLOR_WINDOW + 8));
-			FillRect(hdc, &EXIT_2, (HBRUSH)(COLOR_WINDOW + 7));
-			FillRect(hdc, &EXIT_1, (HBRUSH)(COLOR_WINDOW + 6));
-			FillRect(hdc, &EXIT_0, (HBRUSH)(COLOR_WINDOW + 5));*/
-			/*MoveToEx(hdc, Mainrect_x + Floor_width, Mainrect_y, NULL);
-			LineTo(hdc, Mainrect_x + Floor_width, Mainrect_y + Elevator_height);
-			MoveToEx(hdc, Mainrect_x + Floor_width + Elevator_width, Mainrect_y, NULL);
-			LineTo(hdc, Mainrect_x + Floor_width + Elevator_width, Mainrect_y + Elevator_height);*/
-			//FillRect(hdc, &ELEVATOR, (HBRUSH)(COLOR_WINDOW + 14));
-
+			
 			if (first_update)
 			{
 				InvalidateRect(hWnd, &MAINRECT, TRUE);
-				//SetTimer(hWnd,TM_1, 25, NULL);
 				first_update = false;
 			}
 
